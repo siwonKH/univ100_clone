@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -46,3 +47,11 @@ class Answer(models.Model):
 
     class Meta:
         db_table = 'answer'
+
+
+class UserLike(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    university_id = models.ForeignKey(University, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'user_like'
