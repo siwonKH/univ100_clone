@@ -44,11 +44,11 @@
             </div>
         </div>
         <div class="flex space-x-4">
-            <div class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
-                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="query" placeholder="학교명을 검색해보세요" />
+            <form action="/search" class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
+                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="q" placeholder="학교명을 검색해보세요" />
                 <input type="button" class="w-6 bg-gray-200 md:bg-white md:rounded-lg" style="background-position: 50%; background-image: url(https://www.univ100.kr/images/search.24px.png); background-size: 24px 24px; background-repeat: no-repeat" />
-            </div>
-            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/post">질문하기</a>
+            </form>
+            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="#">질문하기</a>
         </div>
     </div>
     <div class="px-5 py-10 max-w-screen-sm w-full m-auto space-y-5">

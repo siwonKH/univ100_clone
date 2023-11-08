@@ -44,26 +44,26 @@
             </div>
         </div>
         <div class="flex space-x-4">
-            <div class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
-                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="query" placeholder="학교명을 검색해보세요" />
+            <form action="/search" class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
+                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="q" placeholder="학교명을 검색해보세요" />
                 <input type="button" class="w-6 bg-gray-200 md:bg-white md:rounded-lg" style="background-position: 50%; background-image: url(https://www.univ100.kr/images/search.24px.png); background-size: 24px 24px; background-repeat: no-repeat" />
-            </div>
-            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/post">질문하기</a>
+            </form>
+            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/univ/{{ university.id }}/post">질문하기</a>
         </div>
     </div>
     <div class="px-5 py-10 max-w-screen-lg w-full m-auto space-y-5">
         <div class="flex md:justify-center">
             <div class="flex md:flex-col justify-center items-center md:text-center space-x-1">
-                <img class="w-14 md:w-24 p-2" src="https://cf-ui.univ100.kr/campus/55_18_160px.png" alt="대학교 로고">
+                <img class="w-14 md:w-24 p-2" src="{{ university.icon }}" alt="{{ university.name }}">
                 <div>
-                    <h1 class="text-2xl font-bold">서울대학교</h1>
+                    <h1 class="text-2xl font-bold">{{ university.name }}</h1>
                     <span class="text-gray-500 text-sm">4년제</span>
                 </div>
             </div>
         </div>
         <div class="flex justify-evenly text-lg">
-            <a class="border-b-2 border-black font-bold">개요</a>
-            <a class="text-gray-500">질문</a>
+            <a href="/univ/{{ university.id }}" class="border-b-2 border-black font-bold">개요</a>
+            <a href="/univ/{{ university.id }}/q" class="text-gray-500">질문</a>
         </div>
         <div class="p-6 md:flex space-y-2 md:space-y-0 justify-between items-center bg-white rounded-lg shadow-lg">
             <div>
@@ -72,7 +72,7 @@
                         <path d="M9.719,17.073l-6.562-6.51c-0.27-0.268-0.504-0.567-0.696-0.888C1.385,7.89,1.67,5.613,3.155,4.14c0.864-0.856,2.012-1.329,3.233-1.329c1.924,0,3.115,1.12,3.612,1.752c0.499-0.634,1.689-1.752,3.612-1.752c1.221,0,2.369,0.472,3.233,1.329c1.484,1.473,1.771,3.75,0.693,5.537c-0.19,0.32-0.425,0.618-0.695,0.887l-6.562,6.51C10.125,17.229,9.875,17.229,9.719,17.073 M6.388,3.61C5.379,3.61,4.431,4,3.717,4.707C2.495,5.92,2.259,7.794,3.145,9.265c0.158,0.265,0.351,0.51,0.574,0.731L10,16.228l6.281-6.232c0.224-0.221,0.416-0.466,0.573-0.729c0.887-1.472,0.651-3.346-0.571-4.56C15.57,4,14.621,3.61,13.612,3.61c-1.43,0-2.639,0.786-3.268,1.863c-0.154,0.264-0.536,0.264-0.69,0C9.029,4.397,7.82,3.61,6.388,3.61"></path>
                     </svg>
                     <span class="text-lg">관심</span>
-                    <span class="text-lg font-bold">1</span>
+                    <span class="text-lg font-bold">{{ university.likes }}</span>
                 </button>
 
             </div>
@@ -106,107 +106,31 @@
                         <path d="M12.522,10.4l-3.559,3.562c-0.172,0.173-0.451,0.176-0.625,0c-0.173-0.173-0.173-0.451,0-0.624l3.248-3.25L8.161,6.662c-0.173-0.173-0.173-0.452,0-0.624c0.172-0.175,0.451-0.175,0.624,0l3.738,3.736C12.695,9.947,12.695,10.228,12.522,10.4 M18.406,10c0,4.644-3.764,8.406-8.406,8.406c-4.644,0-8.406-3.763-8.406-8.406S5.356,1.594,10,1.594C14.643,1.594,18.406,5.356,18.406,10M17.521,10c0-4.148-3.374-7.521-7.521-7.521c-4.148,0-7.521,3.374-7.521,7.521c0,4.147,3.374,7.521,7.521,7.521C14.147,17.521,17.521,14.147,17.521,10"></path>
                     </svg>
                 </button>
-                <div id="scrollContainer" class="p-2 scroll-container flex overflow-x-auto snap-x snap-mandatory">
+                <div id="scrollContainer" class="w-full p-2 scroll-container flex overflow-x-auto snap-x snap-mandatory">
+                    {% for question in questions %}
                     <div class="snap-center shrink-0 p-3 space-y-3 w-10/12 md:w-1/3 mr-2 md:mr-0">
-                        <div class="p-4 bg-white shadow-md rounded-lg">
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-red-500 text-xl">Q.</span>
-                                    <span class="truncate text-lg font-bold">질문 제목</span>
+                        <a class="w-full" href="/univ/{{ university.id }}/q/{{ question.id }}">
+                            <div class="p-4 bg-white shadow-md rounded-lg">
+                                <div class="space-y-1">
+                                    <div class="flex space-x-2">
+                                        <span class="text-red-500 text-xl">Q.</span>
+                                        <span class="truncate text-lg font-bold">{{ question.title }}</span>
+                                    </div>
+                                    <div class="truncate">{{ question.content }}</div>
+                                    <div class="text-gray-500 text-sm">23년 10월 24일</div>
                                 </div>
-                                <div class="truncate">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-gray-500 text-xl">A.</span>
-                                    <span class="font-bold">답변자</span>
+                                <div class="space-y-1">
+                                    <div class="flex space-x-2">
+                                        <span class="text-gray-500 text-xl">A.</span>
+                                        <span class="font-bold">답변자</span>
+                                    </div>
+                                    <div class="truncate">{{ question.first_answer.content }}</div>
+                                    <div class="text-gray-500 text-sm">23년 10월 24일</div>
                                 </div>
-                                <div class="truncate">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
                             </div>
-                        </div>
+                        </a>
                     </div>
-                    <div class="snap-center shrink-0 p-3 space-y-3 w-10/12 md:w-1/3 mr-2 md:mr-0">
-                        <div class="p-4 bg-white shadow-md rounded-lg">
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-red-500 text-xl">Q.</span>
-                                    <span class="truncate text-lg font-bold">질문 제목</span>
-                                </div>
-                                <div class="truncate">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-gray-500 text-xl">A.</span>
-                                    <span class="font-bold">답변자</span>
-                                </div>
-                                <div class="truncate">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="snap-center shrink-0 p-3 space-y-3 w-10/12 md:w-1/3 mr-2 md:mr-0">
-                        <div class="p-4 bg-white shadow-md rounded-lg">
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-red-500 text-xl">Q.</span>
-                                    <span class="truncate text-lg font-bold">질문 제목</span>
-                                </div>
-                                <div class="truncate">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-gray-500 text-xl">A.</span>
-                                    <span class="font-bold">답변자</span>
-                                </div>
-                                <div class="truncate">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="snap-center shrink-0 p-3 space-y-3 w-10/12 md:w-1/3 mr-2 md:mr-0">
-                        <div class="p-4 bg-white shadow-md rounded-lg">
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-red-500 text-xl">Q.</span>
-                                    <span class="truncate text-lg font-bold">질문 제목</span>
-                                </div>
-                                <div class="truncate">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-gray-500 text-xl">A.</span>
-                                    <span class="font-bold">답변자</span>
-                                </div>
-                                <div class="truncate">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="snap-center shrink-0 p-3 space-y-3 w-10/12 md:w-1/3 mr-2 md:mr-0">
-                        <div class="p-4 bg-white shadow-md rounded-lg">
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-red-500 text-xl">Q.</span>
-                                    <span class="truncate text-lg font-bold">질문 제목</span>
-                                </div>
-                                <div class="truncate">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                            <div class="space-y-1">
-                                <div class="flex space-x-2">
-                                    <span class="text-gray-500 text-xl">A.</span>
-                                    <span class="font-bold">답변자</span>
-                                </div>
-                                <div class="truncate">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴ</div>
-                                <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

@@ -44,52 +44,56 @@
             </div>
         </div>
         <div class="flex space-x-4">
-            <div class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
-                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="query" placeholder="학교명을 검색해보세요" />
+            <form action="/search" class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
+                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="q" placeholder="학교명을 검색해보세요" />
                 <input type="button" class="w-6 bg-gray-200 md:bg-white md:rounded-lg" style="background-position: 50%; background-image: url(https://www.univ100.kr/images/search.24px.png); background-size: 24px 24px; background-repeat: no-repeat" />
-            </div>
-            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/post">질문하기</a>
+            </form>
+            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/univ/{{ university.id }}/post">질문하기</a>
         </div>
     </div>
     <div class="px-5 py-10 max-w-screen-lg w-full m-auto space-y-5">
         <div class="flex md:justify-center">
             <div class="flex md:flex-col justify-center items-center md:text-center space-x-1">
-                <img class="w-14 md:w-24 p-2" src="https://cf-ui.univ100.kr/campus/55_18_160px.png" alt="대학교 로고">
+                <img class="w-14 md:w-24 p-2" src="{{ university.icon }}" alt="{{ university.name }}">
                 <div>
-                    <h1 class="text-2xl font-bold">서울대학교</h1>
+                    <h1 class="text-2xl font-bold">{{ university.name }}</h1>
                     <span class="text-gray-500 text-sm">4년제</span>
                 </div>
             </div>
         </div>
         <div class="flex justify-evenly text-lg">
-            <a class="text-gray-500">개요</a>
-            <a class="border-b-2 border-black font-bold">질문</a>
+            <a href="/univ/{{ university.id }}" class="text-gray-500">개요</a>
+            <a href="/univ/{{ university.id }}/q" class="border-b-2 border-black font-bold">질문</a>
         </div>
-        <div class="w-full">
+        <form action="/univ/{{ university.id }}/q/search" class="w-full">
             <label>
-                <input class="w-full p-3 bg-gray-200 border border-gray-300 rounded-lg text-sm outline-none" type="search" name="query" placeholder="질문을 검색해보세요" />
+                <input class="w-full p-3 bg-gray-200 border border-gray-300 rounded-lg text-sm outline-none" type="search" name="q" placeholder="질문을 검색해보세요" value="{{ query }}" />
             </label>
-        </div>
+        </form>
         <div>
             <div class="w-full space-y-4">
+                {% for question in questions %}
                 <div class="p-4 bg-white space-y-3 rounded-lg shadow-lg">
-                    <div class="space-y-1">
-                        <div class="flex space-x-2">
-                            <span class="text-red-500 text-xl">Q.</span>
-                            <span class="truncate text-lg font-bold">질문 제목 질문 제목 질문 제목 질문 제목 질문 제목 질문 제목 질문 제목 </span>
+                    <a href="/univ/{{ university.id }}/q/{{ question.id }}">
+                        <div class="space-y-1">
+                            <div class="flex space-x-2">
+                                <span class="text-red-500 text-xl">Q.</span>
+                                <span class="truncate text-lg font-bold">{{ question.title }}</span>
+                            </div>
+                            <div class="truncate">{{ question.content }}</div>
+                            <div class="text-gray-500 text-sm">23년 10월 24일</div>
                         </div>
-                        <div class="truncate">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㅇㅁㄴㅇㄴㅁㅇㅁㅇㄴ</div>
-                        <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="flex space-x-2">
-                            <span class="text-gray-500 text-xl">A.</span>
-                            <span class="font-bold">답변자</span>
+                        <div class="space-y-1">
+                            <div class="flex space-x-2">
+                                <span class="text-gray-500 text-xl">A.</span>
+                                <span class="font-bold">답변자</span>
+                            </div>
+                            <div class="truncate">{{ question.first_answer.content }}</div>
+                            <div class="text-gray-500 text-sm">23년 10월 24일</div>
                         </div>
-                        <div class="truncate">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴㄴㄴㅇㄹ</div>
-                        <div class="text-gray-500 text-sm">23년 10월 24일</div>
-                    </div>
+                    </a>
                 </div>
+                {% endfor %}
             </div>
 
     </div>

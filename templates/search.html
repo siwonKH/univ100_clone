@@ -66,51 +66,19 @@
     <div class="px-0 md:px-20">
         <div class="p-3">
             <div class="bg-white p-7 rounded-lg shadow-lg divide-y">
-                <div class="flex py-2 space-x-2">
-                    <div class="flex items-center">
-                        img
-                    </div>
-                    <div>
-                        <div class="font-bold">부산대학교</div>
-                        <div class="py-1 text-xs text-gray-500">재학생 만족도 90%</div>
-                    </div>
-                </div>
-                <div class="flex py-2 space-x-2">
-                    <div class="flex items-center">
-                        img
-                    </div>
-                    <div>
-                        <div class="font-bold">부산대학교</div>
-                        <div class="py-1 text-xs text-gray-500">재학생 만족도 90%</div>
-                    </div>
-                </div>
-                <div class="flex py-2 space-x-2">
-                    <div class="flex items-center">
-                        img
-                    </div>
-                    <div>
-                        <div class="font-bold">부산대학교</div>
-                        <div class="py-1 text-xs text-gray-500">재학생 만족도 90%</div>
-                    </div>
-                </div>
-                <div class="flex py-2 space-x-2">
-                    <div class="flex items-center">
-                        img
-                    </div>
-                    <div>
-                        <div class="font-bold">부산대학교</div>
-                        <div class="py-1 text-xs text-gray-500">재학생 만족도 90%</div>
-                    </div>
-                </div>
-                <div class="flex py-2 space-x-2">
-                    <div class="flex items-center">
-                        img
-                    </div>
-                    <div>
-                        <div class="font-bold">부산대학교</div>
-                        <div class="py-1 text-xs text-gray-500">재학생 만족도 90%</div>
-                    </div>
-                </div>
+                {% for result in results %}
+                    <a href="/univ/{{ result.id }}">
+                        <div class="flex py-2 space-x-2">
+                            <div class="flex items-center">
+                                <img class="w-10" src="{{ result.icon }}" alt="{{ result.name }}" />
+                            </div>
+                            <div>
+                                <div class="font-bold">{{ result.name }}</div>
+                                <div class="py-1 text-xs text-gray-500">재학생 만족도 90%</div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         </div>
     </div>

@@ -44,51 +44,65 @@
             </div>
         </div>
         <div class="flex space-x-4">
-            <div class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
-                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="query" placeholder="학교명을 검색해보세요" />
+            <form action="/search" class="flex border-b-2 border-red-500 md:border-gray-200 md:border md:rounded-lg bg-gray-200 md:bg-white text-xs md:text-sm">
+                <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="q" placeholder="학교명을 검색해보세요" />
                 <input type="button" class="w-6 bg-gray-200 md:bg-white md:rounded-lg" style="background-position: 50%; background-image: url(https://www.univ100.kr/images/search.24px.png); background-size: 24px 24px; background-repeat: no-repeat" />
-            </div>
-            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/post">질문하기</a>
+            </form>
+            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/univ/{{ university.id }}/post">질문하기</a>
         </div>
     </div>
     <div class="px-5 py-10 max-w-screen-lg w-full m-auto space-y-5">
         <div class="flex md:justify-center">
             <div class="flex md:flex-col justify-center items-center md:text-center space-x-1">
-                <img class="w-14 md:w-24 p-2" src="https://cf-ui.univ100.kr/campus/55_18_160px.png" alt="대학교 로고">
+                <img class="w-14 md:w-24 p-2" src="{{ university.icon }}" alt="대학교 로고">
                 <div>
-                    <h1 class="text-base md:text-2xl font-bold">서울대학교</h1>
+                    <h1 class="text-base md:text-2xl font-bold">{{ university.name }}</h1>
                     <span class="text-gray-500 text-sm">4년제</span>
                 </div>
             </div>
         </div>
-        <div class="hidden md:flex justify-evenly text-lg">
-            <a class="text-gray-500">개요</a>
-            <a class="border-b-2 border-black font-bold">질문</a>
+        <div class="flex justify-evenly text-lg">
+            <a href="/univ/{{ university.id }}" class="text-gray-500">개요</a>
+            <a href="/univ/{{ university.id }}/q" class="border-b-2 border-black font-bold">질문</a>
         </div>
-        <div>
+        <div class="space-y-5">
             <div class="w-full space-y-4">
                 <div class="md:p-4 bg-white space-y-3 rounded-lg md:shadow-lg divide-y">
                     <div class="space-y-1 p-2">
                         <div class="flex space-x-2 md:space-x-4">
                             <span class="text-red-500 text-xl md:text-4xl">Q.</span>
                             <div class="p-2 space-y-2 md:space-y-4">
-                                <span class="text-lg md:text-2xl font-bold">질문 제목 질문 제목 질문 제목 질문 제목 질문 제목 질문 제목 질문 제목 </span>
-                                <div class="">내용.......ㅇㄴㄹㄴㅇㄹㄴㄹㄴㅇㄹ.ㅇㅁㄴㅇㄴㅁㅇㅁㅇㄴ</div>
+                                <span class="text-lg md:text-2xl font-bold">{{ question.title }}</span>
+                                <div class="">{{ question.content }}</div>
                                 <div class="text-gray-500 text-sm">23년 10월 24일</div>
                             </div>
                         </div>
                     </div>
+                    {% for answer in question.answers %}
                     <div class="space-y-1 p-2">
                         <div class="flex space-x-2 md:space-x-4">
                             <span class="text-gray-500 text-xl md:text-4xl">A.</span>
                             <div class="p-2 space-y-2 md:space-y-4">
                                 <span class="font-bold">답변자</span>
-                                <div class="">답변 내용....ㅇㄹㄴㅇㄹㄴㅇㄹㄴㅇㅇㄴㄴㄴㅇㄹ</div>
+                                <div class="">{{ answer.content }}</div>
                                 <div class="text-gray-500 text-sm">23년 10월 24일</div>
                             </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
+            </div>
+            <div>
+                <form action="/univ/{{ university.id }}/q/{{ question.id }}/answer" method="post" class="w-full space-y-5">
+                <div class="bg-white p-7 rounded-lg shadow-lg divide-y">
+                    <div class="flex justify-between py-2">
+                        <textarea class="w-full h-24 outline-none" name="content" placeholder="성의 있게 답변해주세요" style="resize: none"></textarea>
+                    </div>
+                </div>
+                <div class="space-y-5">
+                    <button type="submit" class="w-full py-2 px-8 bg-red-500 rounded-lg text-white">답변하기</button>
+                </div>
+            </form>
             </div>
         </div>
     </div>
