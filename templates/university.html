@@ -74,7 +74,32 @@
                     <span class="text-lg">관심</span>
                     <span class="text-lg font-bold">{{ university.likes }}</span>
                 </button>
-
+                <script>
+                    // 관심 버튼을 눌렀을때 fetch 요청
+                    const likeButton = document.querySelector('.like-button');
+                    likeButton.addEventListener('click', async () => {
+                        const response = await fetch('/univ/{{ university.id }}/like', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            likeButton.classList.add('bg-red-500');
+                            likeButton.classList.remove('bg-gray-200');
+                            likeButton.classList.add('text-white');
+                            likeButton.classList.remove('text-gray-500');
+                            likeButton.innerHTML = '관심 취소';
+                        } else {
+                            likeButton.classList.remove('bg-red-500');
+                            likeButton.classList.add('bg-gray-200');
+                            likeButton.classList.remove('text-white');
+                            likeButton.classList.add('text-gray-500');
+                            likeButton.innerHTML = '관심';
+                        }
+                    });
+                </script>
             </div>
             <div class="flex space-x-1 items-center">
                 <svg class="svg-icon w-5" viewBox="0 0 20 20">

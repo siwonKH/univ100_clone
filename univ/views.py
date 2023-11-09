@@ -11,8 +11,8 @@ class Home(views.View):
     @staticmethod
     def get(request):
 
-        # get random 12 universities
-        universities = utils.get_random_12_universities()
+        # get random 20 universities
+        universities = utils.get_random_20_universities()
 
         return render(request, 'index.html', {'universities': universities})
 
@@ -51,9 +51,13 @@ class Search(views.View):
 class Post(views.View):
     @staticmethod
     def get(request, university_id):
-        university = utils.get_university(university_id)
+        if request.user.is_authenticated:
 
-        return render(request, 'post.html', {'university': university})
+            university = utils.get_university(university_id)
+
+            return render(request, 'post.html', {'university': university})
+        else:
+            return redirect('/auth')
 
     def post(self, request, university_id):
         title = request.POST.get('title')
@@ -82,22 +86,14 @@ class QuestionSearch(views.View):
         try:
             query = request.GET.get('q')
 
+            if query == "":
+                return redirect(f'/univ/{university_id}/q')
+
             questions = utils.search_questions(university_id, query)
-            # data = [
-            #     {
-            #         'id': question.id,
-            #         'title': question.title,
-            #         'content': question.content,
-            #         'date': question.date,
-            #         'first_answer': getattr(question, 'first_answer_obj', None),
-            #         'total_score': getattr(question, 'total_score', None),
-            #     }
-            #     for question in questions
-            # ]
 
             return render(request, 'question.html', {'questions': questions, 'university': utils.get_university(university_id), 'query': query})
         except:
-            return redirect(f'/univ/{university_id}/q')
+            return render(request, 'question.html', {'questions': [], 'university': utils.get_university(university_id), 'query': query})
 
 
 class Answer(views.View):
@@ -118,6 +114,34 @@ class Likes(views.View):
     @staticmethod
     def get(request):
         return render(request, 'likes.html')
+
+    @staticmethod
+    def post(request):
+        if request.user.is_authenticated:
+            university_id = request.POST.get('university_id')
+            question_id = request.POST.get('question_id')
+            answer_id = request.POST.get('answer_id')
+
+            if university_id:
+                university = utils.get_university(university_id)
+
+                university.likes.add(request.user)
+
+                return JsonResponse({'likes': university.likes.count()})
+            elif question_id:
+                question = utils.get_university(question_id)
+
+                question.likes.add(request.user)
+
+                return JsonResponse({'likes': question.likes.count()})
+            elif answer_id:
+                answer = utils.get_university(answer_id)
+
+                answer.likes.add(request.user)
+
+                return JsonResponse({'likes': answer.likes.count()})
+        else:
+            return redirect('/auth')
 
 
 class Authenticate(views.View):

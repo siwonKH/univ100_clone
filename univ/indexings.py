@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.db.models import F, Sum, Subquery, OuterRef, Prefetch, ExpressionWrapper, FloatField, Value
+from django.db.models import F, Sum, Subquery, OuterRef, Prefetch, ExpressionWrapper, FloatField, Value, Q
 from django.db.models.functions import Cast
 from konlpy.tag import Komoran
 
@@ -17,7 +17,7 @@ def tokenize(text):
 @transaction.atomic
 def index_document(university, title, content):
     # Tokenize the document content
-    tokens = tokenize(title + content)
+    tokens = tokenize(title + " " + content)
 
     # Calculate the frequency of each token before removing duplicates
     token_frequencies = {token: tokens.count(token) for token in tokens}
@@ -47,11 +47,13 @@ def index_document(university, title, content):
 def search(university_id, query):
     tokens = tokenize(query)
 
+    print(tokens)
+
     # Build a queryset that represents the score subquery for a given token
     def score_subquery(token):
         return Subquery(
             InvertedIndex.objects.filter(
-                word__word=token,
+                Q(word__word__icontains=token),
                 question__university_id=university_id,
                 question=OuterRef('pk')
             ).annotate(
@@ -93,7 +95,7 @@ def search(university_id, query):
 
     # Here we're iterating over each question to attach the first answer
     for question in questions:
-        question.first_answer_obj = question.first_answer[0] if question.first_answer else None
+        question.first_answer = question.first_answer[0] if question.first_answer else None
 
         print(question.total_score)
 

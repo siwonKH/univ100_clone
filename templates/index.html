@@ -48,7 +48,7 @@
                 </div>
             </div>
             <div class="hidden md:block">
-                <a href="/post" class="py-2 px-6 bg-red-500 rounded-lg text-white ">질문하기</a>
+                <a href="/univ/1" class="py-2 px-6 bg-red-500 rounded-lg text-white ">질문하기</a>
             </div>
         </div>
         <div>
@@ -101,7 +101,7 @@
                     <div class="p-4 bg-white shadow-md rounded-lg">
                         <div class="text-lg font-bold">인기 학과</div>
                         <div class="divide-y">
-                            {% for university in universities|slice:"3:6" %}
+                            {% for university in universities|slice:"16:19" %}
                             <a href="/univ/{{ university.id }}">
                                 <div class="flex py-2 space-x-2">
                                     <div class="flex items-center">

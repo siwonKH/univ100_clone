@@ -4,8 +4,8 @@ from univ import indexings
 from univ.models import University, Answer
 
 
-def get_random_12_universities():
-    return University.objects.all()[:12]
+def get_random_20_universities():
+    return University.objects.all().order_by('-id')[:20]
 
 
 def search_university(query):
@@ -19,18 +19,8 @@ def get_university(university_id):
 def get_10_questions_and_first_answer(university_id):
     university = University.objects.get(id=university_id)
 
-    # first_answer_qs = Answer.objects.filter(question__university=university)[:1]
-    #
-    # # Prefetch the first answer for each question using 'Prefetch'
-    # questions = university.question_set.prefetch_related(
-    #     Prefetch('answer_set', queryset=first_answer_qs, to_attr='first_answer')
-    # ).all()[:10]
-    # return questions
+    questions = university.question_set.all().order_by('-id')[:10]
 
-    # Get the first 10 questions
-    questions = university.question_set.all()[:10]
-
-    # Now iterate over the questions and get the first answer for each one
     for question in questions:
         question.first_answer = question.answer_set.first()
 
@@ -40,7 +30,7 @@ def get_10_questions_and_first_answer(university_id):
 def get_all_questions_and_first_answer(university_id):
     university = University.objects.get(id=university_id)
 
-    questions = university.question_set.all()
+    questions = university.question_set.all().order_by('-id')[:50]
 
     for question in questions:
         question.first_answer = question.answer_set.first()
