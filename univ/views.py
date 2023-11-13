@@ -83,17 +83,18 @@ class QuestionDetail(views.View):
 class QuestionSearch(views.View):
     @staticmethod
     def get(request, university_id):
-        try:
-            query = request.GET.get('q')
+        # try:
+        query = request.GET.get('q')
 
-            if query == "":
-                return redirect(f'/univ/{university_id}/q')
+        if query == "":
+            return redirect(f'/univ/{university_id}/q')
 
-            questions = utils.search_questions(university_id, query)
+        questions = utils.search_questions(university_id, query)
 
-            return render(request, 'question.html', {'questions': questions, 'university': utils.get_university(university_id), 'query': query})
-        except:
-            return render(request, 'question.html', {'questions': [], 'university': utils.get_university(university_id), 'query': query})
+        return render(request, 'question.html', {'questions': questions, 'university': utils.get_university(university_id), 'query': query})
+        # except Exception as e:
+        #     print(e)
+        #     return render(request, 'question.html', {'questions': [], 'university': utils.get_university(university_id), 'query': query})
 
 
 class Answer(views.View):
