@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import Home, University, Question, Search, Post, QuestionDetail, Likes, Authenticate, Register, Answer, QuestionSearch
+from .views import Home, University, Question, Search, Post, QuestionDetail, Likes, Authenticate, Register, Answer, QuestionSearch, Mypage, Logout
 
 
 urlpatterns = [
@@ -15,4 +15,6 @@ urlpatterns = [
     path('register', Register.as_view()),
     path('univ/<int:university_id>/q/<int:question_id>/answer', Answer.as_view()),
     path('univ/<int:university_id>/q/search', QuestionSearch.as_view()),
+    path('mypage', Mypage.as_view()),
+    path('logout', Logout.as_view()),
 ]

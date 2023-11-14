@@ -1,5 +1,5 @@
 from django import views
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
@@ -15,6 +15,26 @@ class Home(views.View):
         universities = utils.get_random_20_universities()
 
         return render(request, 'index.html', {'universities': universities})
+
+
+class Mypage(views.View):
+    @staticmethod
+    def get(request):
+        if request.user.is_authenticated:
+
+            return render(request, 'mypage.html', {'user': request.user})
+        else:
+            return redirect('/auth')
+
+
+class Logout(views.View):
+    @staticmethod
+    def get(request):
+        if request.user.is_authenticated:
+            logout(request)
+            return redirect('/')
+        else:
+            return redirect('/auth')
 
 
 class University(views.View):
