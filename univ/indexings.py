@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.db.models import F, Sum, Subquery, OuterRef, Prefetch, ExpressionWrapper, FloatField, Value, Q
+from django.db.models import F, Sum, Subquery, OuterRef, Prefetch, ExpressionWrapper, FloatField, Value
 from django.db.models.functions import Cast
 from konlpy.tag import Komoran
 
@@ -45,58 +45,47 @@ def index_document(university, title, content):
 
 
 def search(university_id, query):
+    print(query)
     tokens = tokenize(query)
-
     print(tokens)
 
-    # Build a queryset that represents the score subquery for a given token
-    def score_subquery(token):
-        return Subquery(
-            InvertedIndex.objects.filter(
-                Q(word__word__icontains=token),
-                question__university_id=university_id,
-                question=OuterRef('pk')
-            ).annotate(
-                score=F('frequency') / (1 + Cast('word__global_frequency', output_field=FloatField()))
-            ).values('score')
-        )
-
-    # Define a Prefetch object for the first answer
-    first_answer_prefetch = Prefetch(
-        'answer_set',
-        queryset=Answer.objects.order_by('id'),
-        to_attr='first_answer'
-    )
-
-    # Start with a queryset for Questions that belong to the given university
-    questions = Question.objects.filter(university_id=university_id).prefetch_related(first_answer_prefetch)
+    document_scores = {}
 
     for token in tokens:
-        # Annotate each question with the score for the current token
-        questions = questions.annotate(**{
-            f'score_{token}': score_subquery(token)
-        })
+        results = InvertedIndex.objects.filter(
+            word__word=token,
+            question__university=university_id
+        ).annotate(
+            global_frequency=F('word__global_frequency'),
+            score=ExpressionWrapper(
+                Cast('frequency', FloatField()) / (1 + Cast('global_frequency', FloatField())),
+                output_field=FloatField()
+            )
+        ).select_related('question__answer_set').values('question_id', 'score', 'question__title', 'question__content',
+                                                        'question__answer__content')
 
-    # Sum up all the individual token scores for each question
-    score_expressions = [F(f'score_{token}') for token in tokens]
-    questions = questions.annotate(
-        raw_total_score=Sum(*score_expressions)
-    ).filter(
-        raw_total_score__isnull=False
-    )
+        for result in results:
+            doc_id = result['question_id']
+            score = result['score']
+            question_title = result['question__title']
+            question_content = result['question__content']
+            answer_content = result['question__answer__content']
 
-    # Multiply the raw total score by 100 using ExpressionWrapper
-    questions = questions.annotate(
-        total_score=ExpressionWrapper(
-            F('raw_total_score') * Value(100),
-            output_field=FloatField()
-        )
-    ).order_by('-total_score')
+            if doc_id in document_scores:
+                document_scores[doc_id]['score'] += score
+            else:
+                document_scores[doc_id] = {
+                    'id': doc_id,
+                    'score': score,
+                    'title': question_title,
+                    'content': question_content,
+                    'answer': answer_content,
+                }
 
-    # Here we're iterating over each question to attach the first answer
+    questions = sorted(document_scores.items(), key=lambda item: item[1]['score'], reverse=True)
+
+    new_question_list = []
     for question in questions:
-        question.first_answer = question.first_answer[0] if question.first_answer else None
+        new_question_list.append(question[1])
 
-        print(question.total_score)
-
-    return questions
+    return new_question_list
