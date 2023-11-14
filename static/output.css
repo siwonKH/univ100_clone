@@ -983,6 +983,15 @@ video {
   padding: 1.5rem;
 }
 
+.focus\:p-5:focus {
+  padding: 1.25rem;
+}
+
+.focus\:py-4:focus {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 @media (min-width: 768px) {
   .md\:mr-0 {
     margin-right: 0px;
@@ -1112,5 +1121,9 @@ video {
     --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  }
+
+  .md\:focus\:p-6:focus {
+    padding: 1.5rem;
   }
 }
