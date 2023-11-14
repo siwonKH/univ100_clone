@@ -22,6 +22,11 @@ class Question(models.Model):
     class Meta:
         db_table = 'question'
 
+        indexes = [
+            models.Index(fields=['title'], name='idx_title'),
+            models.Index(fields=['content'], name='idx_content'),
+        ]
+
 
 class Word(models.Model):
     word = models.TextField(max_length=1000, unique=True)
