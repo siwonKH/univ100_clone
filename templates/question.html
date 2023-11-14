@@ -40,7 +40,7 @@
             <div class="hidden md:flex space-x-6">
                 <a href="/">홈</a>
                 <a href="/likes">관심</a>
-                <a href="#">마이페이지</a>
+                <a href="/mypage">마이페이지</a>
             </div>
         </div>
         <div class="flex space-x-4">
@@ -81,15 +81,15 @@
                                 <span class="truncate text-lg font-bold">{{ question.title }}</span>
                             </div>
                             <div class="truncate">{{ question.content }}</div>
-                            <div class="text-gray-500 text-sm">23년 10월 24일</div>
+                            <div class="text-gray-500 text-sm">23년 11월 14일</div>
                         </div>
                         <div class="space-y-1">
                             <div class="flex space-x-2">
                                 <span class="text-gray-500 text-xl">A.</span>
                                 <span class="font-bold">답변자</span>
                             </div>
-                            <div class="truncate">{{ question.first_answer.content }}</div>
-                            <div class="text-gray-500 text-sm">23년 10월 24일</div>
+                            <div class="truncate">{{ question.answer }}</div>
+                            <div class="text-gray-500 text-sm">23년 11월 14일</div>
                         </div>
                     </a>
                 </div>

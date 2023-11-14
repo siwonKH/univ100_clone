@@ -48,32 +48,17 @@
                 <input class="py-2 md:p-2 bg-gray-200 md:bg-white outline-none md:rounded-lg" type="search" name="q" placeholder="학교명을 검색해보세요" />
                 <input type="button" class="w-6 bg-gray-200 md:bg-white md:rounded-lg" style="background-position: 50%; background-image: url(https://www.univ100.kr/images/search.24px.png); background-size: 24px 24px; background-repeat: no-repeat" />
             </form>
-            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="#">질문하기</a>
+            <a class="hidden md:block py-2 md:px-6 md:bg-red-500 rounded-lg md:text-white text-red-500 px-2" href="/univ/{{ university.id }}/post">질문하기</a>
         </div>
     </div>
-    <div class="px-5 py-10 max-w-screen-sm w-full m-auto space-y-5">
-        <div class="flex justify-center">
-            <form method="post" action="/register" class="w-full p-7 space-y-4 bg-white shadow-lg rounded-lg">
-                <div>
-                    <h1 class="text-2xl font-bold">회원가입</h1>
-                </div>
-                <div>
-                    <input class="w-full p-3 bg-gray-100 rounded-lg" type="text" name="username" placeholder="사용할 아이디">
-                </div>
-                <div>
-                    <input class="w-full p-3 bg-gray-100 rounded-lg" type="password" name="password" placeholder="사용할 비밀번호">
-                </div>
-                <div>
-                    <input class="w-full p-3 bg-red-500 rounded-lg text-white font-bold" type="submit" value="회원가입">
-                </div>
-                <div class="text-center">
-                    <a class="text-center text-red-500 font-bold" href="/register">이미 회원이신가요?</a>
-                </div>
-            </form>
+    <div class="px-5 py-10 max-w-screen-lg w-full m-auto space-y-5 text-center">
+        <div>
+            <span class="text-2xl font-bold text-center">{{ user.username }}로 로그인함</span>
+        </div>
+        <div>
+            <a href="/logout" class="text-white p-3 rounded-lg bg-red-500">로그아웃</a>
         </div>
     </div>
 </body>
-
-
 
 </html>
