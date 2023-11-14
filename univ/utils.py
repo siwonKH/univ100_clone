@@ -50,5 +50,6 @@ def add_question(university_id, title, content):
 
 
 def search_questions(university_id, query):
-    results = indexings.search(university_id, query)
-    return results
+    questions = indexings.search(university_id, query)
+
+    return questions
