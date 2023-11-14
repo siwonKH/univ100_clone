@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.db.models import F, Sum, Subquery, OuterRef, Prefetch, ExpressionWrapper, FloatField, Value
+from django.db.models import F, Sum, Subquery, OuterRef, Prefetch, ExpressionWrapper, FloatField, Value, Q
 from django.db.models.functions import Cast
 from konlpy.tag import Komoran
 
@@ -83,6 +83,36 @@ def search(university_id, query):
                 }
 
     questions = sorted(document_scores.items(), key=lambda item: item[1]['score'], reverse=True)
+
+    new_question_list = []
+    for question in questions:
+        new_question_list.append(question[1])
+
+    return new_question_list
+
+
+def legacy_search(university_id, query):
+    results = Question.objects.filter(
+        Q(content__contains=query) | Q(title__contains=query),
+        university=university_id
+    ).select_related('answer_set').values('id', 'title', 'content', 'answer__content')
+
+    document_scores = {}
+
+    for result in results:
+        doc_id = result['id']
+        question_title = result['title']
+        question_content = result['content']
+        answer_content = result['answer__content']
+
+        document_scores[doc_id] = {
+            'id': doc_id,
+            'title': question_title,
+            'content': question_content,
+            'answer': answer_content,
+        }
+
+    questions = sorted(document_scores.items(), key=lambda item: item[1]['id'], reverse=True)
 
     new_question_list = []
     for question in questions:

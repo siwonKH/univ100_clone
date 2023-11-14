@@ -51,5 +51,9 @@ def add_question(university_id, title, content):
 
 def search_questions(university_id, query):
     questions = indexings.search(university_id, query)
+    return questions
 
+
+def legacy_search_questions(university_id, query):
+    questions = indexings.legacy_search(university_id, query)
     return questions

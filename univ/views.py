@@ -1,3 +1,5 @@
+import time
+
 from django import views
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -109,7 +111,18 @@ class QuestionSearch(views.View):
         if query == "":
             return redirect(f'/univ/{university_id}/q')
 
+        start_time = time.time()
         questions = utils.search_questions(university_id, query)
+        end_time = time.time()
+        search_time = end_time - start_time
+        print(f'search: {search_time:.6f} seconds')
+
+        start_time = time.time()
+        questions2 = utils.legacy_search_questions(university_id, query)
+        end_time = time.time()
+        search_time = end_time - start_time
+        print(f'legacy search: {search_time:.6f} seconds')
+
 
         return render(request, 'question.html', {'questions': questions, 'university': utils.get_university(university_id), 'query': query})
         # except Exception as e:
